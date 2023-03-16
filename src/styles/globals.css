@@ -105,3 +105,59 @@ a {
     color-scheme: dark;
   }
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display');
+
+body{
+  font-family: 'Noto Sans Display', sans-serif!important;
+}
+
+.nav > a, button, h1{
+  color: #333333!important;
+}
+svg{
+  color: white;
+}
+
+.homeCorsoCard{
+  background-color: rgba(85, 136, 165, 0.075);
+  padding: 20px;
+  border-radius: 15px;
+  
+  backdrop-filter: blur(50px);
+
+  color: white;
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  
+  max-height: 20vh;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media screen and (min-width: 0px) and (max-width: 600px) {
+  .corsoDesc{ display: none; }  /* show it on smaller screen */
+}
+@media screen and (min-width: 600px) and (max-width: 1024px) {
+  .corsoDesc{ display: block; }   /* hide it on larger screens */
+}
+
+.partner{
+  display: flex;
+  overflow-X: hidden;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+
+.partner img{
+  width: 20vh;
+  padding: 10px;
+  aspect-ratio:  3/2;
+  object-fit: contain;
+}
+
