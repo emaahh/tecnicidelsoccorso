@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar'
 
 import Registrazione from '@/components/Registrazione';
 
-import { useAppContext } from './context/state';
+import { useAppContext } from '../context/state';
 
 import Container from '@mui/material/Container';
 

@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react';
 
 const AppContext = createContext();
 
-export default function AppWrapper({ children }) {
+export function AppWrapper({ children }) {
     const [currentUser, setCurrentUser] = useState('sloggato');
   
 
