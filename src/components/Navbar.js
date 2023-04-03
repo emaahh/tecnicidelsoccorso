@@ -1,4 +1,7 @@
 import * as React from 'react';
+import Link from 'next/link'
+
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -23,6 +26,7 @@ import MailIcon from '@mui/icons-material/Mail';
 
 
 function Navbar() {
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -63,38 +67,44 @@ function Navbar() {
         <List>
           <ListItem disablePadding>
             <ListItemButton>
-              <ListItemText primary={'CHI SIAMO'} />
+              <Link href="/chi-siamo"><ListItemText primary={'CHI SIAMO'} /></Link>
             </ListItemButton>
           </ListItem>
 
           <ListItem disablePadding>
             <ListItemButton>
-              <ListItemText primary={'I NOSTRI CORSI'} />
+              <Link href="/tutti-i-corsi"><ListItemText primary={'I NOSTRI CORSI'} /></Link>
             </ListItemButton>
           </ListItem>
 
           <ListItem disablePadding>
             <ListItemButton>
-              <ListItemText primary={'ISCRIVITI'} />
+                <Link href="/account"><ListItemText primary={'ISCRIVITI'} /></Link>
             </ListItemButton>
           </ListItem>
 
           <ListItem disablePadding>
             <ListItemButton>
-              <ListItemText primary={'CONTATTI'} />
+              <ListItemText onClick={goToBottom} primary={'CONTATTI'} />
             </ListItemButton>
           </ListItem>
         </List>
       </Box>
     );
-  
+    
+  const goToBottom = () => {
+      window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "smooth",
+      });
+  };
 
 
   return (
     <AppBar position="static" style={{backgroundColor:'white', boxShadow:"none"}} className='nav'>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <img src='/images/logo.png' sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} style={{padding: '20px', paddingLeft:"0px!important", height: '100px', width: 'auto'}}/>
+          <Link href="/"><img src='/images/logo.png' sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} style={{paddingBottom: '20px', paddingRight: '20px', paddingTop: '20px', paddingLeft:"0px!important", height: '100px', width: 'auto'}}/></Link>
          
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }}} style={{justifyContent: 'flex-end'}}>
@@ -125,10 +135,10 @@ function Navbar() {
             
          
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{justifyContent: 'flex-end'}}>
-            <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>CHI SIAMO</Button>
-            <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>I NOSTRI CORSI</Button>
-            <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>ISCRIVITI</Button>
-            <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>CONTATTI</Button>
+            <Link href="/chi-siamo"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'black', display: 'block' }}>CHI SIAMO</Button></Link>
+            <Link href="/tutti-i-corsi"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'black', display: 'block' }}>I NOSTRI CORSI</Button></Link>
+            <Link href="/account"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'black', display: 'block' }}>ISCRIVITI</Button></Link>
+            <Button onClick={goToBottom} sx={{ my: 2, color: 'black', display: 'block' }}>CONTATTI</Button>
           </Box>
 
         </Toolbar>

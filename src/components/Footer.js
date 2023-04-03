@@ -13,7 +13,11 @@ import { BsInstagram, BsYoutube } from "react-icons/bs";
 
 export const Footer = () => {
   return (
-    <Box sx={{width: "100%", height: "auto", backgroundColor: "#bf1e2e", paddingTop: "1rem", paddingBottom: "1rem"}}>
+    <>
+      <br/>
+      <br/>
+      <br/>
+      <Box sx={{width: "100%", height: "auto", backgroundColor: "#bf1e2e", paddingTop: "1rem", paddingBottom: "1rem"}}>
         <br/>
         <Container maxWidth="lg">
             <Grid container direction="column">
@@ -21,6 +25,7 @@ export const Footer = () => {
 
                 <Typography color="white" variant="h4">
                     <img src="/favicon.ico" height="30px"/><strong> TECNICI DEL SOCCORSO</strong><br/>
+                    <p style={{fontSize:"15px", color:"white"}}>&nbsp;Hai dubbi? Non esitare a contattarci!</p>
                     <Chip icon={<CallRoundedIcon style={{color:"white"}}/>} sx={{color:"white"}} label="+39 347 0115111" />
                     &nbsp;
                     <Link href={'mailto:info@tecnicidelsoccorso.it'}><Chip style={{cursor:'pointer!important'}} icon={<AlternateEmailRoundedIcon style={{color:"white"}}/>} sx={{color:"white"}} label="info@tecnicidelsoccorso.it"/></Link>
@@ -43,13 +48,14 @@ export const Footer = () => {
                 
             </Grid>
             <Grid item xs={12}>
-                <Typography color="#ffffff59" variant="subtitle1"><br/>
+                <Typography color="#ffffff59" variant="subtitle2"><br/>
                 {`Copyright ©${new Date().getFullYear()} all rights reserved`}
                 </Typography>
             </Grid>
             </Grid>
         </Container>
     </Box>
+    </>
   );
 };
 
