@@ -79,7 +79,7 @@ function Navbar() {
 
           <ListItem disablePadding>
             <ListItemButton>
-                <Link href="/account"><ListItemText primary={'ISCRIVITI'} /></Link>
+                <Link href="/account"><ListItemText primary={'ACCOUNT'} /></Link>
             </ListItemButton>
           </ListItem>
 
@@ -137,7 +137,7 @@ function Navbar() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{justifyContent: 'flex-end'}}>
             <Link href="/chi-siamo"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'black', display: 'block' }}>CHI SIAMO</Button></Link>
             <Link href="/tutti-i-corsi"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'black', display: 'block' }}>I NOSTRI CORSI</Button></Link>
-            <Link href="/account"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'black', display: 'block' }}>ISCRIVITI</Button></Link>
+            <Link href="/account"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'black', display: 'block' }}>ACCOUNT</Button></Link>
             <Button onClick={goToBottom} sx={{ my: 2, color: 'black', display: 'block' }}>CONTATTI</Button>
           </Box>
 

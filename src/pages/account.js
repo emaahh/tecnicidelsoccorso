@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Head from 'next/head'
 import Navbar from '@/components/Navbar'
 
+import { getCookie, setCookie, deleteCookie } from 'cookies-next';
+
+
 import Registrazione from '@/components/Registrazione';
+import Login from '@/components/Login';
 
 import { useAppContext } from '../context/state';
 
@@ -12,7 +16,12 @@ import Container from '@mui/material/Container';
 export default function account() {
   const mycontext = useAppContext();
 
+  const [changeform, setChangeform] = useState(true)
 
+  const data = getCookie('data')
+  if(data){
+    mycontext.setCurrentUser(JSON.parse(data))
+  }
 
   return (
     <>
@@ -28,7 +37,49 @@ export default function account() {
         <br/>
         <Container maxWidth="xl">
           
-          <Registrazione/>
+          {
+            mycontext.currentUser!='sloggato'?
+              <>    
+                <Container maxWidth="xl">
+
+                  <br/>
+                  <br/>
+                  <h1 style={{fontWeight:"900", color:"#333333"}}>I TUOI DATI</h1>
+                  <br/>
+                  <br/>
+
+                    <center>
+                      <h2 style={{fontWeight:"900", color:"#333333"}}>{mycontext.currentUser.Nome}</h2>
+
+                      <button onClick={()=>{deleteCookie("data"), mycontext.setCurrentUser("sloggato")}}>Esci</button>
+                    </center>
+
+                </Container>
+                
+                
+
+
+              </> 
+              :
+              <>
+                {
+                  changeform?
+                    <>
+                      <Registrazione/>
+                      <button onClick={()=>setChangeform(false)}>Hai già un account?</button>
+                    </>
+                    :
+                    <>
+                      <Login/>
+                      <button onClick={()=>setChangeform(true)}>Non hai un account?</button>
+                    </>
+                }
+
+              </>
+              
+          }
+
+         
            
         </Container>
         

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
 import Navbar from '@/components/Navbar'
 
+import { setCookie } from 'cookies-next';
+
+
 import { useAppContext } from '../context/state';
 
 import Container from '@mui/material/Container';
@@ -90,6 +93,47 @@ const Registrazione = () => {
     const CheckDati = () => {
         if(checkIfEmail(Email) == true){
             if(checkIfEmail(Pec) == true){
+              if(Nome==""){
+                setError("Inserire un Nome")
+              }
+              else if(Cognome==""){
+                setError("Inserire un Cognome")
+              }
+              else if(Email.trim()==""){
+                setError("Inserire una Email")
+              }
+              else if(Password.trim()==""){
+                setError("Inserire una Password")
+              }
+              else if(showpartitaIva == true && Iva.trim()==""){
+                setError("Inserire la Partita IVA")
+              }
+              else if(showcodicefiscale == true && Fiscale.trim()==""){
+                setError("Inserire il Codice Fiscale")
+              }
+              else if(showcodicefiscale==false && showpartitaIva==false){
+                setError("Selezione Codice Fiscale e/o Partita IVA")
+              }
+              else if(Univoco.trim()==""){
+                setError("Inserire il Codice Univoco")
+              }
+              else if(Pec.trim()==""){
+                setError("Inserire la PEC")
+              }
+              else if(Legale==""){
+                setError("Inserire la Sede Legale")
+              }
+              else if(professione==""){
+                setError("Seleziona la tua Professione")
+              }
+              else if(Iva!="" && containsOnlyNumbers(Iva)==false){
+                setError("La Partita IVA richiede solo numeri")
+              }else {
+                Sign()
+                setError("")
+                setRisposta("")
+      
+              }
                 
             }else{
                 setError("Inserire una PEC valida")
@@ -97,74 +141,71 @@ const Registrazione = () => {
         }else{
             setError("Inserire un email valida")
         }
-
-        if(Nome==""){
-          setError("Inserire un Nome")
-        }
-        else if(Cognome==""){
-          setError("Inserire un Cognome")
-        }
-        else if(Email.trim()==""){
-          setError("Inserire una Email")
-        }
-        else if(Password.trim()==""){
-          setError("Inserire una Password")
-        }
-        else if(showpartitaIva == true && Iva.trim()==""){
-          setError("Inserire la Partita IVA")
-        }
-        else if(showcodicefiscale == true && Fiscale.trim()==""){
-          setError("Inserire il Codice Fiscale")
-        }
-        else if(showcodicefiscale==false && showpartitaIva==false){
-          setError("Selezione Codice Fiscale e/o Partita IVA")
-        }
-        else if(Univoco.trim()==""){
-          setError("Inserire il Codice Univoco")
-        }
-        else if(Pec.trim()==""){
-          setError("Inserire la PEC")
-        }
-        else if(Legale==""){
-          setError("Inserire la Sede Legale")
-        }
-        else if(professione==""){
-          setError("Seleziona la tua Professione")
-        }
-        else if(Iva!="" && containsOnlyNumbers(Iva)==false){
-          setError("La Partita IVA richiede solo numeri")
-        }else {
-          setError("")
-          alert("tutto ok")
-
-        }
     }
 
 
-    const [risposta, setRisposta] = useState({});
+    const [risposta, setRisposta] = useState();
     
     const Sign = () => {
       const requestOptions = {
         method: 'POST',
-        body: JSON.stringify({Nome:"Emanuele",Cognome:"Celestino",Email:"celestinoemanuele015@gmail.com",Password:"1234Ciao"})
+        body: JSON.stringify(
+          {
+            Nome:Nome, 
+            Cognome:Cognome,
+            Email:Email,
+            Password:Password,
+            Fiscale:Fiscale,
+            Iva:Iva,
+            Univoco:Univoco,
+            Pec:Pec,
+            Legale:Legale,
+            professione:professione
+          })
       };
       fetch('/api/account/registrazione', requestOptions)
           .then(response => response.json())
-          .then(data => setRisposta({ data }));
+          .then(data => {
+            if(!data.risposta){
+              setRisposta('esiste già un account con questa Email')
+            }else{
+              setCookie('data', {
+                Nome:Nome, 
+                Cognome:Cognome,
+                Email:Email,
+                Password:Password,
+                Fiscale:Fiscale,
+                Iva:Iva,
+                Univoco:Univoco,
+                Pec:Pec,
+                Legale:Legale,
+                professione:professione
+              }, {maxAge:new Date().getTime() + (60*60*60*60*1000)});
+
+              mycontext.setCurrentUser({
+                Nome:Nome, 
+                Cognome:Cognome,
+                Email:Email,
+                Password:Password,
+                Fiscale:Fiscale,
+                Iva:Iva,
+                Univoco:Univoco,
+                Pec:Pec,
+                Legale:Legale,
+                professione:professione
+              })
+            }
+          });
     }
     
 
     return (
         <>
-          
-            <p>{mycontext.currentUser}</p>
-            <button onClick={()=>mycontext.setCurrentUser('loggato')}>CLL</button>
-
-            <Container maxWidth="xl">
+          <Container maxWidth="xl">
 
             <br/>
             <br/>
-            <h1 style={{fontWeight:"900", color:"#333333"}}>ACCOUNT</h1>
+            <h1 style={{fontWeight:"900", color:"#333333"}}>REGISTRAZIONE</h1>
             <br/>
             <br/>
 
@@ -331,12 +372,12 @@ const Registrazione = () => {
                 <br/>
                 <br/>
                 <p>{error}</p>
+                <p>{risposta}</p>
                 <br/>
                 
-                {error==""? <Button variant="contained" onClick={Sign}>Registrati</Button> : <Button variant="contained" onClick={CheckDati}>Controlla Dati</Button>}
+                <Button variant="contained" onClick={CheckDati}>Registrati</Button>
               
-                <p>{JSON.stringify(risposta)}</p>
-                <Button variant="contained" onClick={Sign}>Registrati</Button>
+                
               </center>
             </Container>
         
