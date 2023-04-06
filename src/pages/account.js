@@ -49,7 +49,7 @@ export default function account() {
                   <br/>
 
                     <center>
-                      <h2 style={{fontWeight:"900", color:"#333333"}}>{mycontext.currentUser.Nome}</h2>
+                      <h2 style={{fontWeight:"900", color:"#333333"}}>Ciao! {mycontext.currentUser.Nome}</h2>
 
                       <button onClick={()=>{deleteCookie("data"), mycontext.setCurrentUser("sloggato")}}>Esci</button>
                     </center>
