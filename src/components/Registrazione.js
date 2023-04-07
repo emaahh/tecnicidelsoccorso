@@ -89,6 +89,9 @@ const Registrazione = () => {
     const [professione, setProfessione] = useState("");
     const updateProfessione = (event) => {setProfessione(event.target.value);};
 
+    const [specializzazione, setSpecializzazione] = useState("");
+    const updateSpecializzazione = (event) => {setSpecializzazione(event.target.value);};
+
 
     const CheckDati = () => {
         if(checkIfEmail(Email) == true){
@@ -120,7 +123,7 @@ const Registrazione = () => {
               else if(Pec.trim()==""){
                 setError("Inserire la PEC")
               }
-              else if(Legale==""){
+              else if(Legale.trim()==""){
                 setError("Inserire la Sede Legale")
               }
               else if(professione==""){
@@ -128,6 +131,8 @@ const Registrazione = () => {
               }
               else if(Iva!="" && containsOnlyNumbers(Iva)==false){
                 setError("La Partita IVA richiede solo numeri")
+              }else if(professione=="Specializzando" && specializzazione.trim()==""){
+                setError("Specificare la specializzazione")
               }else {
                 Sign()
                 setError("")
@@ -160,7 +165,8 @@ const Registrazione = () => {
             Univoco:Univoco,
             Pec:Pec,
             Legale:Legale,
-            professione:professione
+            professione:professione,
+            specializzazioneextra:specializzazione
           })
       };
       fetch('/api/account/registrazione', requestOptions)
@@ -179,7 +185,8 @@ const Registrazione = () => {
                 Univoco:Univoco,
                 Pec:Pec,
                 Legale:Legale,
-                professione:professione
+                professione:professione,
+                specializzazioneextra:specializzazione
               }, {maxAge:new Date().getTime() + (60*60*60*60*1000)});
 
               mycontext.setCurrentUser({
@@ -192,7 +199,8 @@ const Registrazione = () => {
                 Univoco:Univoco,
                 Pec:Pec,
                 Legale:Legale,
-                professione:professione
+                professione:professione,
+                specializzazioneextra:specializzazione
               })
             }
           });
@@ -366,6 +374,25 @@ const Registrazione = () => {
                     <MenuItem value={'Cittadino'}>Cittadino</MenuItem>
                   </Select>
                 </FormControl>
+                <br/>
+
+                {
+                  professione=="Specializzando"?
+                    <>
+                      <TextField
+                        required
+                        id="filled-required"
+                        label="Specializzazione"
+                        type="text"
+                        variant="filled"
+                        style={{padding:"8px"}}
+                        value={specializzazione}
+                        onChange={updateSpecializzazione}
+                      />
+                    </>
+                  :
+                  null
+                }
                 
                 <br/>
                 <br/>
