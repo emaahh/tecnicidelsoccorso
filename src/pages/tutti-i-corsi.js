@@ -46,6 +46,10 @@ const Tutti_i_corsi = () => {
                 <Link href="/corsi/disostruzione-pediatrica"><CorsoCard name="Disostruzione Pediatrica" desc="Il programma del corso di Disostruzione Pediatrica, è finalizzato alla formazione , informazione e aggiornamento del personale sanitario e laico, con lo scopo di sviluppare.." image="https://i.imgur.com/vharoYC.jpg"/></Link>
                 <Link href="/corsi/assistente-bagnanti-fisa"><CorsoCard name="Assistente Bagnanti Fisa " desc="Il corso di Assistente Bagnanti Fisa abilita al controllo della sicurezza dei bagnanti negli impianti balneari marini , nelle piscine" image="https://i.imgur.com/KotprX1.jpg"/></Link>
 
+                <Link href="/corsi/advanced-medical-life-support"><CorsoCard name="Advanced Medical Life Support" desc="Il corso Advanced Medical Life Support (AMLS) è il gold standard per la formazione in materia di valutazione e il trattamento medico di emerge..." image="https://placehold.co/600x400?text=Copertina%20corso%20mancante"/></Link>
+                <Link href="/corsi/pediatric-advanced-life-support"><CorsoCard name="Pediatric advanced life support (PALS)" desc="Questo corso in aula, basato su video e guidato da un istruttore, usa una serie di emergenze pediatriche simulate per rafforzare i concetti importanti di un approccio sistematico alla valutaz..." image="https://placehold.co/600x400?text=Copertina%20corso%20mancante"/></Link>
+                <Link href="/corsi/prehospital-trauma-life-support"><CorsoCard name="Prehospital Trauma Life Support (PHTLS)" desc="Il Prehospital Trauma Life Support (PHTLS) della NAEMT è riconosciuto in tutto il mondo come il principale programma di forma..." image="https://placehold.co/600x400?text=Copertina%20corso%20mancante"/></Link>
+
             </Container>
 
             <br/>
