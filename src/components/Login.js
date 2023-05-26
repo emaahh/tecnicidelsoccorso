@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
 import Navbar from '@/components/Navbar'
+import Router from 'next/router';
 
-import { setCookie } from 'cookies-next';
+import PocketBase from 'pocketbase'
+const pb = new PocketBase('https://tds-db.pockethost.io')
 
-
-import { useAppContext } from '../context/state';
 
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
@@ -26,8 +26,29 @@ import Typography from '@mui/material/Typography';
 import { pink } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 
+const Log = async (Email, Password) => {
+  
+  const data = {
+    'email':Email,
+    'password':Password,
+  }
+
+
+  try{
+    await pb.collection('users').authWithPassword(data.email, data.password)
+    Router.reload()
+  }
+  catch (err) {
+    console.error(err)
+    console.log(err.data)
+    
+    if (err.data.code){
+      return 'non trovato'
+    }
+  }
+}
+
 const Login = () => {
-    const mycontext = useAppContext();
 
     const [showPassword, setShowPassword] = React.useState(false);
 
@@ -73,7 +94,10 @@ const Login = () => {
           } else {
             setError("")
             setRisposta("")
-            Log()
+            Log(Email, Password)
+            .then((a) =>{
+              setRisposta(a)
+            })  
           }
         }else{
             setError("Inserire un email valida")
@@ -83,26 +107,7 @@ const Login = () => {
 
     const [risposta, setRisposta] = useState();
     
-    const Log = () => {
-      const requestOptions = {
-        method: 'POST',
-        body: JSON.stringify(
-          {
-            Email:Email,
-            Password:Password
-          })
-      };
-      fetch('/api/account/login', requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            if(data.risposta){
-              setRisposta('Account non trovato')
-            }else{
-              setCookie('data', data[0], {maxAge:new Date().getTime() + (60*60*60*60*1000)});
-              mycontext.setCurrentUser(data[0])
-            }
-          });
-    }
+    
     
 
     return (

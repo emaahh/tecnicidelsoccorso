@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
 import Navbar from '@/components/Navbar'
+import Router from 'next/router';
+
 
 import { setCookie } from 'cookies-next';
 
-
-import { useAppContext } from '../context/state';
+import PocketBase from 'pocketbase'
+const pb = new PocketBase('https://tds-db.pockethost.io')
 
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
@@ -26,8 +28,45 @@ import Typography from '@mui/material/Typography';
 import { pink } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 
+
+const Sign = async (Nome, Cognome, Email, Password, Fiscale, Iva, Univoco, Pec, Legale, professione, specializzazione) => {
+  const data = {
+        'nome':Nome, 
+        'cognome':Cognome,
+        'email':Email,
+        'password':Password,
+        'passwordConfirm':Password,
+        'cod_fiscale':Fiscale,
+        'part_iva':Iva,
+        'cod_univoco':Univoco,
+        'pec':Pec,
+        'sede_legale':Legale,
+        'professione':professione,
+        'specializzazione_extra':specializzazione
+  }
+  
+
+      try{
+        await pb.collection('users').create(data)
+        await pb.collection('users').authWithPassword(data.email, data.password)
+        Router.reload()
+      }
+      catch (err) {
+        console.error(err)
+        console.log(err.data)
+        
+        if (err.data.data.email.code){
+          return 'esiste con la stessa mail'
+        }
+      }
+
+
+     
+}
+
+
+
 const Registrazione = () => {
-    const mycontext = useAppContext();
 
     const [showPassword, setShowPassword] = React.useState(false);
     const [showpartitaIva, setShowpartitaIva] = React.useState(false);
@@ -134,10 +173,13 @@ const Registrazione = () => {
               }else if(professione=="Specializzando" && specializzazione.trim()==""){
                 setError("Specificare la specializzazione")
               }else {
-                Sign()
-                setError("")
                 setRisposta("")
-      
+                setError("")
+
+                Sign(Nome, Cognome, Email, Password, Fiscale, Iva, Univoco, Pec, Legale, professione, specializzazione)
+                .then((a) =>{
+                  setRisposta(a)
+                })  
               }
                 
             }else{
@@ -151,65 +193,11 @@ const Registrazione = () => {
 
     const [risposta, setRisposta] = useState();
     
-    const Sign = () => {
-      const requestOptions = {
-        method: 'POST',
-        body: JSON.stringify(
-          {
-            Nome:Nome, 
-            Cognome:Cognome,
-            Email:Email,
-            Password:Password,
-            Fiscale:Fiscale,
-            Iva:Iva,
-            Univoco:Univoco,
-            Pec:Pec,
-            Legale:Legale,
-            professione:professione,
-            specializzazioneextra:specializzazione
-          })
-      };
-      fetch('/api/account/registrazione', requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            if(!data.risposta){
-              setRisposta('esiste già un account con questa Email')
-            }else{
-              setCookie('data', {
-                Nome:Nome, 
-                Cognome:Cognome,
-                Email:Email,
-                Password:Password,
-                Fiscale:Fiscale,
-                Iva:Iva,
-                Univoco:Univoco,
-                Pec:Pec,
-                Legale:Legale,
-                professione:professione,
-                specializzazioneextra:specializzazione
-              }, {maxAge:new Date().getTime() + (60*60*60*60*1000)});
-
-              mycontext.setCurrentUser({
-                Nome:Nome, 
-                Cognome:Cognome,
-                Email:Email,
-                Password:Password,
-                Fiscale:Fiscale,
-                Iva:Iva,
-                Univoco:Univoco,
-                Pec:Pec,
-                Legale:Legale,
-                professione:professione,
-                specializzazioneextra:specializzazione
-              })
-            }
-          });
-    }
+    
     
 
     return (
         <>
-          <Container maxWidth="xl">
 
             <br/>
             <br/>
@@ -406,7 +394,7 @@ const Registrazione = () => {
               
                 
               </center>
-            </Container>
+
         
     </>
   );

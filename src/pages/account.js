@@ -1,27 +1,31 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Head from 'next/head'
 import Navbar from '@/components/Navbar'
 
-import { getCookie, setCookie, deleteCookie } from 'cookies-next';
+import PocketBase from 'pocketbase'
+const pb = new PocketBase('https://tds-db.pockethost.io')
 
 
 import Registrazione from '@/components/Registrazione';
 import Login from '@/components/Login';
 
-import { useAppContext } from '../context/state';
+
 
 import Container from '@mui/material/Container';
 
 
 export default function account() {
-  const mycontext = useAppContext();
+
 
   const [changeform, setChangeform] = useState(true)
+ 
+  const [user, setUser] = useState(pb.authStore.model);
 
-  const data = getCookie('data')
-  if(data){
-    mycontext.setCurrentUser(JSON.parse(data))
-  }
+  useEffect(() => {
+    return pb.authStore.onChange((token, model) => {
+      setUser(model);
+    });
+  }, []);
 
   return (
     <>
@@ -38,51 +42,43 @@ export default function account() {
         <Container maxWidth="xl">
           
           {
-            mycontext.currentUser!='sloggato'?
-              <>    
-                <Container maxWidth="xl">
+            user?
+            <div>    
 
-                  <br/>
-                  <br/>
-                  <h1 style={{fontWeight:"900", color:"#333333"}}>I TUOI DATI</h1>
-                  <br/>
-                  <br/>
+
+                    <h1 style={{fontWeight:"900", color:"#333333"}}>I TUOI DATI</h1>
+
 
                     <center>
-                      <h2 style={{fontWeight:"900", color:"#333333"}}>Ciao! {mycontext.currentUser.Nome}</h2>
+                      <h2 style={{fontWeight:"900", color:"#333333"}}>Ciao! {pb.authStore.model.nome}</h2>
 
-                      <button onClick={()=>{deleteCookie("data"), mycontext.setCurrentUser("sloggato")}}>Esci</button>
+                      <button onClick={()=>{pb.authStore.clear()}}>Esci</button>
                     </center>
 
-                </Container>
-                
-                
 
-
-              </> 
+              </div> 
               :
-              <>
+              <div>
                 {
                   changeform?
-                    <>
+                    <div>
                       <Registrazione/>
                       <button onClick={()=>setChangeform(false)}>Hai già un account?</button>
-                    </>
+                    </div>
                     :
-                    <>
+                    <div>
                       <Login/>
                       <button onClick={()=>setChangeform(true)}>Non hai un account?</button>
-                    </>
+                    </div>
                 }
 
-              </>
+              </div>
               
           }
 
          
            
         </Container>
-        
       </main>
     </>
   )

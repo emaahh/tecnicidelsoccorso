@@ -1,5 +1,10 @@
+import React, {useState} from 'react';
 import Head from 'next/head'
 import Navbar from '@/components/Navbar'
+
+
+//calendar
+import Calendar from 'react-calendar';
 
 
 //mui
@@ -13,7 +18,35 @@ import Carousel from 'react-material-ui-carousel'
 //facebook
 import { FacebookEmbed } from 'react-social-media-embed';
 
+import { differenceInCalendarDays } from 'date-fns';
+
+function isSameDay(a, b) {
+  return differenceInCalendarDays(a, b) === 0;
+}
+
+const datesToAddContentTo = [
+  new Date(2023, 5, 2),
+  new Date(2023, 4, 25),
+  new Date(2023, 4, 7),
+];
+
+function tileContent({ date, view }) {
+  // Add class to tiles in month view only
+  if (view === 'month') {
+    // Check if a date React-Calendar wants to check is on the list of dates to add class to
+    if (datesToAddContentTo.find(dDate => isSameDay(dDate, date))) {
+      return 'My content';
+    }
+  }
+}
+
 export default function Home() {
+  const [value, setValue] = useState(new Date());
+  function onChange(nextValue) {
+    setValue(nextValue);
+  }
+
+
   return (
     <>
       <Head>
@@ -25,6 +58,7 @@ export default function Home() {
 
       <main style={{backgroundColor:"white"}}>
         <Navbar/>
+
         <Container maxWidth="xl">
 
           <br/>
@@ -103,6 +137,28 @@ export default function Home() {
 
           </Container>
 
+          <br/>
+          <br/>
+          <br/>
+          <center><h2 style={{color:"#333333",fontWeight:"900"}}>CALENDARIO CORSI</h2></center>
+          <br/>
+
+          <center>
+            <h1>
+              {
+                value.getDate()} {datesToAddContentTo.find(dDate => isSameDay(dDate, value))? 
+                <span>Disponibile &nbsp;&nbsp;<Chip color="error" label="Prenotati!" onClick={()=>alert('dd')} style={{fontSize:"17px", fontWeight:"bold", padding:"15px"}}/></span>
+                : 
+                'vuoto'
+              }
+            </h1>
+            <div>
+              <Calendar onChange={onChange} value={value} tileContent={tileContent}/>
+            </div>
+          </center>
+
+        </Container>
+
 
           <br/>
           <br/>
@@ -118,7 +174,6 @@ export default function Home() {
             <img src='https://i.imgur.com/3n9mMWz.jpg'/>
           </div>
 
-        </Container>
       </main>
     </>
   )
